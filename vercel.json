@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/:cat(kampanyalar|borekler|kofteler|manti|sarma-dolma|kisir)", "destination": "/index.html" },
+    { "source": "/:cat(kampanyalar|borekler|kofteler|manti|sarma-dolma|kisir)/", "destination": "/index.html" }
+  ]
+}
