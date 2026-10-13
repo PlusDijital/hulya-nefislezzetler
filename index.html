@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hülya Nefis Lezzetler | Ev Yapımı Mantı, İçli Köfte, El Açması Börek – Sakarya</title>
-<meta name="description" content="Sakarya Serdivan'da ev yapımı içli köfte (6 al 5 öde), el açması börek, mantı, sarma, kuru dolma, kısır ve fellah köfte. Güncel fiyat listesi, günlük taze üretim. Sipariş Instagram DM'den.">
+<meta name="description" content="Sakarya Serdivan'da ev yapımı içli köfte ve kıymalı börekte 6 al 5 öde, 2 kg mantıda %10 indirim; el açması börek, mantı, sarma, kuru dolma, kısır ve fellah köfte. Güncel fiyat listesi, günlük taze üretim. Sipariş Instagram DM'den.">
 <link rel="canonical" href="https://hulya-nefislezzetler.vercel.app/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Hülya Nefis Lezzetler – Ev Yapımı Lezzetler, Sakarya">
@@ -102,8 +102,13 @@ section{padding:64px 0}
 .addpack{margin-left:auto;border:0;background:var(--brick);color:#fff;font:800 13px "Nunito Sans",sans-serif;border-radius:999px;padding:7px 12px;cursor:pointer}
 .sub{font-size:14px;color:var(--muted);margin-top:8px;min-height:20px}
 .sub b{color:var(--ink)}
+.nudge{display:block;margin-top:4px;color:var(--brick);font-weight:700}
 .qty output{min-width:58px;font-size:14px}
 .price-note{text-align:center;color:var(--muted);font-size:13px;margin-top:22px}
+.camps{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:-14px 0 26px}
+.camps a{background:#fff7e6;border:1.5px solid var(--gold);color:var(--ink);text-decoration:none;font-weight:800;font-size:14px;padding:7px 14px;border-radius:999px}
+.camps a:hover{background:var(--gold)}
+.card{scroll-margin-top:80px}
 /* steps */
 .steps{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .step-grid{display:grid;gap:18px}
@@ -194,6 +199,7 @@ footer a{text-decoration:none;font-weight:700;color:var(--brick)}
       <h2>Fiyat Listemiz</h2>
       <p>Tamamı ev yapımı, katkısız ve günlük hazırlanan lezzetlerimiz ❤️ Ürünleri seçin, toplam tutarınız hesaplansın; siparişiniz hazır mesaj olarak DM'e gitsin.</p>
     </div>
+    <div class="camps"><a href="#c-icli">🥟 İçli köfte 6 al 5 öde</a><a href="#c-kiymali">🥧 Kıymalı börek 6 al 5 öde</a><a href="#c-manti">🥟 Mantı 2 kg'da %10</a><a href="#c-dolma">🫑 Kuru dolma 10+ adet 40 TL</a></div>
     <div class="menu-grid" id="menuGrid"></div>
     <p class="price-note">Fiyatlar güncellenebilir; kesin tutar ve teslimat bilgisi DM üzerinden onaylanır.</p>
   </div>
@@ -267,30 +273,39 @@ footer a{text-decoration:none;font-weight:700;color:var(--brick)}
 <script>
 const DM="https://ig.me/m/hulya.nefislezzetler";
 const products=[
- {id:"icli",name:"İçli Köfte",tag:"6 al 5 öde",hot:true,img:"icli-kofte",price:75,unit:"adet",step:1,deal:{buy:6,pay:5},desc:"İnce hamur, bol iç harç. Dışı çıtır, içi lezzet dolu ev yapımı içli köfte."},
+ {id:"icli",name:"İçli Köfte",tag:"6 al 5 öde",hot:true,img:"icli-kofte",price:75,unit:"adet",step:1,deal:{type:"bxgy",buy:6,pay:5},desc:"İnce hamur, bol iç harç. Dışı çıtır, içi lezzet dolu ev yapımı içli köfte."},
  {id:"borek",name:"El Açması Börek",tag:"En çok sevilen",img:"borek-yakin",price:115,unit:"adet",step:1,desc:"Dışı çıtır, içi yumuşacık; mis gibi tereyağı kokulu, tamamen el açması börek."},
- {id:"kiymali",name:"El Açması Kıymalı Börek",tag:"Bol kıymalı",img:"borek-adet",price:135,unit:"adet",step:1,desc:"İnce el açması hamur, bol kıymalı iç. Tek tek elde sarılır."},
+ {id:"kiymali",name:"El Açması Kıymalı Börek",tag:"6 al 5 öde",hot:true,img:"borek-adet",price:135,unit:"adet",step:1,deal:{type:"bxgy",buy:6,pay:5},desc:"İnce el açması hamur, bol kıymalı iç. Tek tek elde sarılır."},
  {id:"tepsi",name:"Tepsi Böreği",tag:"Kalabalık sofralara",img:"borek-spiral",price:1390,unit:"tepsi",step:1,desc:"Misafir sofraları ve özel günler için koca bir tepsi el açması börek."},
- {id:"manti",name:"Ev Yapımı Mantı",tag:"Minik minik",img:"manti-cig",price:849,unit:"kg",step:0.5,desc:"Tek tek elde kapatılan minik mantılar; ev yapımı hamur, özenle hazırlanmış iç."},
+ {id:"manti",name:"Ev Yapımı Mantı",tag:"2 kg'da %10 indirim",hot:true,img:"manti-cig",price:849,unit:"kg",step:0.5,deal:{type:"pct",min:2,pct:10},desc:"Tek tek elde kapatılan minik mantılar; ev yapımı hamur, özenle hazırlanmış iç."},
  {id:"sarma",name:"Zeytinyağlı Yaprak Sarma",tag:"Limonlu",img:"sarma-kutu",price:890,unit:"kg",step:0.5,desc:"İncecik sarılmış, bol limonlu zeytinyağlı yaprak sarma."},
- {id:"dolma",name:"Kuru Dolma",tag:"Adetle",img:"dolma",price:45,unit:"adet",step:1,desc:"Kuru patlıcan ve biber dolması; ev usulü iç harçla, adet adet."},
+ {id:"dolma",name:"Kuru Dolma",tag:"10+ adette indirim",hot:true,img:"dolma",price:45,unit:"adet",step:1,deal:{type:"tier",min:10,unitPrice:40},desc:"Kuru patlıcan ve biber dolması; ev usulü iç harçla, adet adet."},
  {id:"fellah",name:"Fellah Köfte",tag:"Soslu / Sossuz",img:"ev-yemegi",unit:"kg",step:0.5,variants:[{k:"soslu",label:"Soslu",price:750},{k:"sossuz",label:"Sossuz",price:500}],desc:"Bulgurlu, yumuşacık fellah köftesi. İster bol soslu, ister sossuz."},
  {id:"kisir",name:"Kısır",tag:"Taze yeşillikli",img:null,emoji:"🥗",price:750,unit:"kg",step:0.5,desc:"İnce bulgur ve bol yeşillikle hazırlanan ev usulü kısır."}
 ];
-const TL=n=>new Intl.NumberFormat("tr-TR",{maximumFractionDigits:2}).format(n)+" TL";
+const TL=n=>new Intl.NumberFormat("tr-TR",Number.isInteger(n)?{}:{minimumFractionDigits:2,maximumFractionDigits:2}).format(n)+" TL";
 const fmtQ=(q,u)=>(u==="kg"?String(q).replace(".",","):q)+" "+u;
 const cart={}, variant={};
 products.forEach(p=>{cart[p.id]=0; if(p.variants) variant[p.id]=p.variants[0].k});
 const priceOf=p=>p.variants? p.variants.find(v=>v.k===variant[p.id]).price : p.price;
 const lineName=p=>p.variants? p.name+" ("+p.variants.find(v=>v.k===variant[p.id]).label+")" : p.name;
-function lineTotal(p){const q=cart[p.id],pr=priceOf(p); if(p.deal){const free=Math.floor(q/p.deal.buy)*(p.deal.buy-p.deal.pay);return {full:q*pr,total:(q-free)*pr}} return {full:q*pr,total:q*pr}}
+function dealCalc(p,q){const pr=priceOf(p),full=q*pr,d=p.deal;if(!d)return {full,total:full};
+ if(d.type==="bxgy"){const free=Math.floor(q/d.buy)*(d.buy-d.pay);return {full,total:(q-free)*pr}}
+ if(d.type==="tier")return {full,total:q>=d.min?q*d.unitPrice:full};
+ if(d.type==="pct")return {full,total:q>=d.min?Math.floor(full*(100-d.pct)/100):full};
+ return {full,total:full}}
+function lineTotal(p){return dealCalc(p,cart[p.id])}
+const packN=p=>p.deal.type==="bxgy"?p.deal.buy:p.deal.min;
+function dealText(p){const d=p.deal,n=packN(p),c=dealCalc(p,n),u=p.unit;
+ const title=d.type==="bxgy"?`🎁 ${d.buy} al ${d.pay} öde`:d.type==="tier"?`🎁 ${d.min}+ adet: ${TL(d.unitPrice)}/adet`:`🎁 ${String(d.min).replace(".",",")} kg ve üzeri %${d.pct}`;
+ return `<span class="deal-badge">${title}</span><span>${fmtQ(n,u)}: <s>${TL(c.full)}</s> <b>${TL(c.total)}</b></span><button class="addpack" data-id="${p.id}" data-n="${n}">+ ${fmtQ(n,u)} ekle</button>`}
 const grid=document.getElementById("menuGrid");
 grid.innerHTML=products.map(p=>{
  const media=p.img?`<img src="${p.img}.webp" alt="${p.name} – ev yapımı, Sakarya" loading="lazy" width="900" height="675" decoding="async">`:`<div class="noimg"><span>${p.emoji}</span></div>`;
  const priceHtml=p.variants?`<div class="variants">${p.variants.map((v,i)=>`<button class="var${i?'':' on'}" data-id="${p.id}" data-k="${v.k}">${v.label}<b>${TL(v.price)}<small>/${p.unit}</small></b></button>`).join("")}</div>`
   :`<div class="price">${TL(p.price)}<small> / ${p.unit}</small></div>`;
- const dealHtml=p.deal?`<div class="deal"><span class="deal-badge">🎁 ${p.deal.buy} al ${p.deal.pay} öde</span><span>${p.deal.buy} adet: <s>${TL(p.deal.buy*p.price)}</s> <b>${TL(p.deal.pay*p.price)}</b></span><button class="addpack" data-id="${p.id}" data-n="${p.deal.buy}">+ ${p.deal.buy}'lı paket ekle</button></div>`:"";
- return `<article class="card${p.hot?' hot':''}">
+ const dealHtml=p.deal?`<div class="deal" id="d-${p.id}">${dealText(p)}</div>`:"";
+ return `<article class="card${p.hot?' hot':''}" id="c-${p.id}">
   <div class="media">${media}${p.hot?`<span class="ribbon">${p.tag}</span>`:""}</div>
   <div class="card-body">
    ${p.hot?"":`<span class="tag">${p.tag}</span>`}
@@ -309,13 +324,18 @@ function renderCard(p){
  const q=cart[p.id];
  document.getElementById("q-"+p.id).textContent=q?fmtQ(q,p.unit):"0";
  const t=lineTotal(p), el=document.getElementById("s-"+p.id);
- el.innerHTML=q? (t.full>t.total?`Ara toplam: <s>${TL(t.full)}</s> <b>${TL(t.total)}</b> 🎉`:`Ara toplam: <b>${TL(t.total)}</b>`) : "";
+ let nudge="";
+ if(q&&p.deal){const d=p.deal;
+  if(d.type==="bxgy"&&q%d.buy===d.buy-1)nudge=`👉 1 adet daha ekleyin, o adet <b>bedava</b>!`;
+  else if(d.type==="tier"&&q<d.min&&q>=d.min-3){const c=dealCalc(p,d.min);nudge=`👉 ${d.min-q} adet daha ekleyin, ${d.min} adet sadece <b>${TL(c.total)}</b>`}
+  else if(d.type==="pct"&&q<d.min){nudge=`👉 ${fmtQ(+(d.min-q).toFixed(2),"kg")} daha ekleyin, <b>%${d.pct} indirim</b> kazanın`}}
+ el.innerHTML=(q? (t.full>t.total?`Ara toplam: <s>${TL(t.full)}</s> <b>${TL(t.total)}</b> 🎉`:`Ara toplam: <b>${TL(t.total)}</b>`) : "")+(nudge?`<span class="nudge">${nudge}</span>`:"");
 }
 grid.addEventListener("click",e=>{
  const v=e.target.closest(".var");
  if(v){variant[v.dataset.id]=v.dataset.k;v.parentElement.querySelectorAll(".var").forEach(x=>x.classList.toggle("on",x===v));const p=products.find(x=>x.id===v.dataset.id);renderCard(p);renderBar();return}
  const pk=e.target.closest(".addpack");
- if(pk){const p=products.find(x=>x.id===pk.dataset.id);cart[p.id]+= +pk.dataset.n;renderCard(p);renderBar();return}
+ if(pk){const p=products.find(x=>x.id===pk.dataset.id);cart[p.id]=+(cart[p.id]+ +pk.dataset.n).toFixed(2);renderCard(p);renderBar();return}
  const b=e.target.closest(".qty button"); if(!b)return;
  const p=products.find(x=>x.id===b.dataset.id);
  let q=+(cart[p.id]+ (+b.dataset.d)*p.step).toFixed(2);
