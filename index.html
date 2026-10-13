@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hülya Nefis Lezzetler | Ev Yapımı Mantı, İçli Köfte, El Açması Börek – Sakarya</title>
-<meta name="description" content="Sakarya Serdivan'da ev yapımı içli köfte ve kıymalı börekte 6 al 5 öde, 2 kg mantıda %10 indirim; el açması börek, mantı, sarma, kuru dolma, kısır ve fellah köfte. Güncel fiyat listesi, günlük taze üretim. Sipariş Instagram DM'den.">
+<meta name="description" content="Sakarya Serdivan'da ev yapımı içli köfte ve kıymalı börekte 6 al 5 öde, 2 kg mantı ve zeytinyağlı sarmada %10 indirim; el açması börek, mantı, sarma, kuru dolma, kısır ve fellah köfte. Güncel fiyat listesi, günlük taze üretim. Sipariş Instagram DM'den.">
 <link rel="canonical" href="https://hulya-nefislezzetler.vercel.app/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Hülya Nefis Lezzetler – Ev Yapımı Lezzetler, Sakarya">
@@ -199,7 +199,7 @@ footer a{text-decoration:none;font-weight:700;color:var(--brick)}
       <h2>Fiyat Listemiz</h2>
       <p>Tamamı ev yapımı, katkısız ve günlük hazırlanan lezzetlerimiz ❤️ Ürünleri seçin, toplam tutarınız hesaplansın; siparişiniz hazır mesaj olarak DM'e gitsin.</p>
     </div>
-    <div class="camps"><a href="#c-icli">🥟 İçli köfte 6 al 5 öde</a><a href="#c-kiymali">🥧 Kıymalı börek 6 al 5 öde</a><a href="#c-manti">🥟 Mantı 2 kg'da %10</a><a href="#c-dolma">🫑 Kuru dolma 10+ adet 40 TL</a></div>
+    <div class="camps"><a href="#c-icli">🥟 İçli köfte 6 al 5 öde</a><a href="#c-kiymali">🥧 Kıymalı börek 6 al 5 öde</a><a href="#c-manti">🥟 Mantı 2 kg'da %10</a><a href="#c-sarma">🍋 Zeytinyağlı sarma 2 kg'da %10</a><a href="#c-dolma">🫑 Kuru dolma 10+ adet 40 TL</a></div>
     <div class="menu-grid" id="menuGrid"></div>
     <p class="price-note">Fiyatlar güncellenebilir; kesin tutar ve teslimat bilgisi DM üzerinden onaylanır.</p>
   </div>
@@ -278,7 +278,7 @@ const products=[
  {id:"kiymali",name:"El Açması Kıymalı Börek",tag:"6 al 5 öde",hot:true,img:"borek-adet",price:135,unit:"adet",step:1,deal:{type:"bxgy",buy:6,pay:5},desc:"İnce el açması hamur, bol kıymalı iç. Tek tek elde sarılır."},
  {id:"tepsi",name:"Tepsi Böreği",tag:"Kalabalık sofralara",img:"borek-spiral",price:1390,unit:"tepsi",step:1,desc:"Misafir sofraları ve özel günler için koca bir tepsi el açması börek."},
  {id:"manti",name:"Ev Yapımı Mantı",tag:"2 kg'da %10 indirim",hot:true,img:"manti-cig",price:849,unit:"kg",step:0.5,deal:{type:"pct",min:2,pct:10},desc:"Tek tek elde kapatılan minik mantılar; ev yapımı hamur, özenle hazırlanmış iç."},
- {id:"sarma",name:"Zeytinyağlı Yaprak Sarma",tag:"Limonlu",img:"sarma-kutu",price:890,unit:"kg",step:0.5,desc:"İncecik sarılmış, bol limonlu zeytinyağlı yaprak sarma."},
+ {id:"sarma",name:"Zeytinyağlı Yaprak Sarma",tag:"2 kg'da %10 indirim",hot:true,img:"sarma-kutu",price:890,unit:"kg",step:0.5,deal:{type:"pct",min:2,pct:10},desc:"İncecik sarılmış, bol limonlu zeytinyağlı yaprak sarma."},
  {id:"dolma",name:"Kuru Dolma",tag:"10+ adette indirim",hot:true,img:"dolma",price:45,unit:"adet",step:1,deal:{type:"tier",min:10,unitPrice:40},desc:"Kuru patlıcan ve biber dolması; ev usulü iç harçla, adet adet."},
  {id:"fellah",name:"Fellah Köfte",tag:"Soslu / Sossuz",img:"ev-yemegi",unit:"kg",step:0.5,variants:[{k:"soslu",label:"Soslu",price:750},{k:"sossuz",label:"Sossuz",price:500}],desc:"Bulgurlu, yumuşacık fellah köftesi. İster bol soslu, ister sossuz."},
  {id:"kisir",name:"Kısır",tag:"Taze yeşillikli",img:null,emoji:"🥗",price:750,unit:"kg",step:0.5,desc:"İnce bulgur ve bol yeşillikle hazırlanan ev usulü kısır."}
