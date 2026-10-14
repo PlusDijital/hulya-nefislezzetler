@@ -271,6 +271,13 @@ footer a{text-decoration:none;font-weight:800;color:var(--brick)}
 .dr-head h2{font-size:22px}
 .dr-grip{width:44px;height:5px;border-radius:5px;background:var(--line);margin:8px auto 0}
 @media(min-width:760px){.dr-grip{display:none}}
+.dr-tools{display:flex;align-items:center;gap:8px}
+.dr-clear{border:0;background:none;color:var(--brick);font:700 13.5px inherit;font-family:inherit;cursor:pointer;padding:8px 6px;text-decoration:underline;text-underline-offset:3px}
+.dr-clear[hidden]{display:none}
+.line .rm{display:block;margin:6px 0 0 auto;border:0;background:none;color:#a28f7e;font:700 12px inherit;font-family:inherit;cursor:pointer;padding:4px 0}
+.line .rm:hover{color:var(--brick)}
+.toast.act{pointer-events:auto}
+.toast button{margin-left:10px;border:0;background:var(--brick);color:#fff;border-radius:999px;padding:5px 12px;font:800 13px inherit;font-family:inherit;cursor:pointer}
 .dr-close{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-size:18px}
 .dr-body{overflow-y:auto;padding:6px 18px;flex:1}
 .dr-empty{text-align:center;color:var(--muted);padding:40px 10px}
@@ -298,6 +305,8 @@ body.lock{overflow:hidden}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 </style>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
+<script>/* Meta Pixel */window.PIXEL_ID="__PIXEL_ID__";
+if(/^\d+$/.test(window.PIXEL_ID)){!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init',window.PIXEL_ID);fbq('track','PageView');}</script>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
@@ -423,7 +432,7 @@ body.lock{overflow:hidden}
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drTitle" aria-hidden="true">
  <div class="dr-grip"></div>
- <div class="dr-head"><h2 id="drTitle">🛒 Sepetim</h2><button class="dr-close" id="drClose" aria-label="Sepeti kapat">✕</button></div>
+ <div class="dr-head"><h2 id="drTitle">🛒 Sepetim</h2><div class="dr-tools"><button class="dr-clear" id="drClear" hidden>🗑 Sepeti temizle</button><button class="dr-close" id="drClose" aria-label="Sepeti kapat">✕</button></div></div>
  <div class="dr-body" id="drBody"></div>
  <div class="dr-foot" id="drFoot">
   <div class="sum"><span>Ara toplam</span><span id="sumFull"></span></div>
@@ -468,11 +477,13 @@ const P=id=>products.find(x=>x.id===id);
 const variant={}, sel={};
 let cart={};
 products.forEach(p=>{sel[p.id]=1;if(p.variants)variant[p.id]=p.variants[0].k});
-try{const c=JSON.parse(localStorage.getItem("hulya_cart")||"{}");if(c&&typeof c==="object")cart=c}catch(e){}
-const save=()=>{try{localStorage.setItem("hulya_cart",JSON.stringify(cart))}catch(e){}};
+try{const c=JSON.parse(localStorage.getItem("hulya_cart")||"{}"),t=+localStorage.getItem("hulya_cart_t")||0;if(c&&typeof c==="object"&&Date.now()-t<3*864e5)cart=c}catch(e){}
+const save=()=>{try{localStorage.setItem("hulya_cart",JSON.stringify(cart));localStorage.setItem("hulya_cart_t",Date.now())}catch(e){}};
 const vPrice=(p,vk)=>p.variants?p.variants.find(v=>v.k===vk).price:p.price;
 const vName=(p,vk)=>p.variants?p.name+" ("+p.variants.find(v=>v.k===vk).label+")":p.name;
 const keyOf=(p,vk)=>p.variants?p.id+":"+vk:p.id;
+const cid=(p,vk)=>p.variants?p.id+"-"+vk:p.id;
+const track=(ev,data,custom)=>{try{window.fbq&&window.fbq(custom?"trackCustom":"track",ev,Object.assign({currency:"TRY"},data))}catch(e){}};
 function dealCalc(p,q,vk){const v=vk!==undefined?vk:variant[p.id],pr=vPrice(p,v),full=q*pr,d=p.deal;if(!d||(d.onlyV&&!d.onlyV.includes(v)))return {full,total:full};
  if(d.type==="bxgy"){const free=Math.floor(q/d.buy)*(d.buy-d.pay);return {full,total:(q-free)*pr}}
  if(d.type==="tier")return {full,total:q>=d.min?q*d.unitPrice:full};
@@ -540,7 +551,7 @@ $("menuGrid").addEventListener("click",e=>{
  const pk=e.target.closest("[data-pack]");
  if(pk){const p=P(pk.dataset.pack);sel[p.id]=+pk.dataset.n;if(p.deal.onlyV){variant[p.id]=p.deal.onlyV[0];$("c-"+p.id).querySelectorAll(".var").forEach(x=>x.setAttribute("aria-pressed",x.dataset.k===variant[p.id]))}renderCard(p);return}
  const ad=e.target.closest("[data-add]");
- if(ad){const p=P(ad.dataset.add),k=keyOf(p,variant[p.id]);cart[k]=(cart[k]||0)+sel[p.id];sel[p.id]=1;save();renderCard(p);renderCart(true);
+ if(ad){const p=P(ad.dataset.add),k=keyOf(p,variant[p.id]),_q=sel[p.id],_v=variant[p.id],_t=dealCalc(p,_q,_v);track("AddToCart",{content_ids:[cid(p,_v)],content_type:"product",content_name:vName(p,_v),contents:[{id:cid(p,_v),quantity:_q}],value:_t.total});cart[k]=(cart[k]||0)+sel[p.id];sel[p.id]=1;save();renderCard(p);renderCart(true);
   ad.textContent="✓ Eklendi";ad.classList.add("done");clearTimeout(ad._t);ad._t=setTimeout(()=>{ad.textContent="Sepete Ekle";ad.classList.remove("done")},1300);
   toast(`🛒 ${vName(p,variant[p.id])} sepette: ${fmtQ(cart[k],p.unit)}`);return}
  const b=e.target.closest(".qty button");if(!b)return;
@@ -560,26 +571,30 @@ function renderCart(bump){
  $("drBody").innerHTML=n?es.map(e=>{const t=eTotal(e),nd=nudgeFor(e.p,e.q,e.vk);return `<div class="line">
    ${imgTag(e.p)}
    <div><h4>${vName(e.p,e.vk)}</h4><div class="meta">${TL(vPrice(e.p,e.vk))} / ${e.p.unit}${t.full>t.total?` · <span class="save">${TL(t.full-t.total)} indirim</span>`:""}${nd?`<br><span style="color:var(--brick);font-weight:700">${nd.replace(/<\/?b>/g,"")}</span>`:""}</div>
-    <div class="qty"><button aria-label="Azalt" data-ck="${e.k}" data-d="-1">−</button><output>${fmtQ(e.q,e.p.unit)}</output><button aria-label="Arttır" data-ck="${e.k}" data-d="1">+</button></div></div>
-   <div class="lt">${t.full>t.total?`<s>${TL(t.full)}</s>`:""}${TL(t.total)}</div></div>`}).join("")
+    <div class="qty"><button aria-label="${e.q>1?"Azalt":"Sepetten çıkar"}" data-ck="${e.k}" data-d="-1">${e.q>1?"−":"🗑"}</button><output>${fmtQ(e.q,e.p.unit)}</output><button aria-label="Arttır" data-ck="${e.k}" data-d="1">+</button></div></div>
+   <div class="lt">${t.full>t.total?`<s>${TL(t.full)}</s>`:""}${TL(t.total)}<button class="rm" data-rm="${e.k}" aria-label="${vName(e.p,e.vk)} ürününü sepetten çıkar">✕ Kaldır</button></div></div>`}).join("")
   :`<div class="dr-empty"><div style="font-size:44px">🧺</div><p>Sepetiniz boş.<br>Fiyat listesinden lezzetleri ekleyin.</p></div>`;
- $("drFoot").style.display=n?"":"none";
+ $("drFoot").style.display=n?"":"none";$("drClear").hidden=!n;
  $("sumFull").textContent=TL(S.full);$("sumDisc").textContent="−"+TL(S.full-S.total);$("sumDiscRow").style.display=S.full>S.total?"":"none";$("sumTotal").textContent=TL(S.total);
  products.forEach(renderCard);
 }
-$("drBody").addEventListener("click",e=>{const b=e.target.closest("[data-ck]");if(!b)return;const k=b.dataset.ck;cart[k]=Math.max(0,(cart[k]||0)+(+b.dataset.d));if(!cart[k])delete cart[k];save();renderCart()});
-function openCart(){$("drawer").classList.add("on");$("scrim").classList.add("on");$("drawer").setAttribute("aria-hidden","false");document.body.classList.add("lock");$("drClose").focus()}
+let undoCart=null;
+function undoToast(m){const t=$("toast");t.innerHTML="";t.append(m);const b=document.createElement("button");b.textContent="Geri al";b.onclick=()=>{if(undoCart){cart=undoCart;undoCart=null;save();renderCart()}t.classList.remove("show","act")};t.append(b);t.classList.add("show","act");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show","act"),5000)}
+$("drBody").addEventListener("click",e=>{const r=e.target.closest("[data-rm]");if(r){const k=r.dataset.rm,[id,vk]=k.split(":");undoCart=Object.assign({},cart);delete cart[k];save();renderCart();undoToast(vName(P(id),vk)+" çıkarıldı");return}
+ const b=e.target.closest("[data-ck]");if(!b)return;const k=b.dataset.ck;if(cart[k]===1&&+b.dataset.d<0){undoCart=Object.assign({},cart);const [id,vk]=k.split(":");delete cart[k];save();renderCart();undoToast(vName(P(id),vk)+" çıkarıldı");return}cart[k]=Math.max(0,(cart[k]||0)+(+b.dataset.d));if(!cart[k])delete cart[k];save();renderCart()});
+$("drClear").addEventListener("click",()=>{if(!entries().length)return;undoCart=Object.assign({},cart);cart={};save();renderCart();undoToast("Sepet temizlendi")});
+function openCart(){if(entries().length){const S=sums();track("InitiateCheckout",{content_ids:entries().map(e=>cid(e.p,e.vk)),contents:entries().map(e=>({id:cid(e.p,e.vk),quantity:e.q})),content_type:"product",num_items:entries().length,value:S.total})}$("drawer").classList.add("on");$("scrim").classList.add("on");$("drawer").setAttribute("aria-hidden","false");document.body.classList.add("lock");$("drClose").focus()}
 function closeCart(){$("drawer").classList.remove("on");$("scrim").classList.remove("on");$("drawer").setAttribute("aria-hidden","true");document.body.classList.remove("lock")}
 ["cartBtn","barInfo","barOpen"].forEach(id=>$(id).addEventListener("click",openCart));
 $("drClose").addEventListener("click",closeCart);$("scrim").addEventListener("click",closeCart);
 addEventListener("keydown",e=>{if(e.key==="Escape")closeCart()});
 /* ---------- DM ---------- */
 async function copy(t){try{await navigator.clipboard.writeText(t);return true}catch(e){try{const a=document.createElement("textarea");a.value=t;a.style.position="fixed";a.style.opacity="0";document.body.appendChild(a);a.select();const ok=document.execCommand("copy");a.remove();return ok}catch(_){return false}}}
-function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),3200)}
+function toast(m){const t=$("toast");t.textContent=m;t.classList.remove("act");t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),3200)}
 const orderMsg=()=>{const S=sums();return "Merhaba Hülya Hanım, siteden sipariş vermek istiyorum 🌸\n"+cartLines().join("\n")+(S.full>S.total?"\nKampanya indirimi: "+TL(S.full-S.total):"")+"\nTahmini toplam: "+TL(S.total)+"\nTeslim günü/saati için bilgi alabilir miyim?"};
 async function goDM(msg){const ok=await copy(msg);toast(ok?"✅ Siparişiniz kopyalandı! Instagram açılınca mesaja yapıştırıp gönderin.":"Instagram mesajları açılıyor…");setTimeout(()=>{location.href=DM},ok?1000:200)}
-document.addEventListener("click",e=>{const a=e.target.closest(".js-dm");if(!a)return;e.preventDefault();goDM(entries().length?orderMsg():a.dataset.msg)});
-$("obSend").addEventListener("click",()=>goDM(orderMsg()));
+document.addEventListener("click",e=>{const a=e.target.closest(".js-dm");if(!a)return;e.preventDefault();track("Contact",entries().length?{value:sums().total,content_ids:entries().map(x=>cid(x.p,x.vk)),content_type:"product"}:{});goDM(entries().length?orderMsg():a.dataset.msg)});
+$("obSend").addEventListener("click",()=>{const S=sums(),es=entries();track("Contact",{content_ids:es.map(e=>cid(e.p,e.vk)),contents:es.map(e=>({id:cid(e.p,e.vk),quantity:e.q})),content_type:"product",value:S.total});track("SiparisDM",{value:S.total,num_items:es.length},true);goDM(orderMsg())});
 $("copyBtn").addEventListener("click",async()=>toast(await copy(orderMsg())?"📋 Sipariş metni kopyalandı":"Kopyalanamadı"));
 /* ---------- gallery + lightbox ---------- */
 $("gallery").innerHTML=GALLERY.map(([f,a],i)=>`<button data-i="${i}" aria-label="${a} – büyüt"><img src="/${f}-s.webp" alt="${a}" loading="lazy" decoding="async" width="420" height="555"></button>`).join("");
@@ -604,6 +619,8 @@ $("vids").addEventListener("click",e=>{const b=e.target.closest("[data-reel]");i
 })();
 /* ---------- başlangıç rotası (/borekler gibi) ---------- */
 (()=>{const c=catFromPath();if(c.k!=="all"){filterCat(c.k);setRoute(c,false);requestAnimationFrame(()=>scrollToMenu(false))}})();
+/* ---------- ViewContent (kart görünürlüğü) ---------- */
+(()=>{if(!("IntersectionObserver"in window))return;const seen=new Set();const io=new IntersectionObserver(es=>es.forEach(en=>{if(!en.isIntersecting)return;const id=en.target.id.slice(2);if(seen.has(id))return;seen.add(id);io.unobserve(en.target);const p=P(id);if(!p)return;const ids=p.variants?p.variants.map(v=>cid(p,v.k)):[p.id];track("ViewContent",{content_ids:ids,content_type:"product",content_name:p.name,value:p.variants?Math.min(...p.variants.map(v=>v.price)):p.price})}),{threshold:.6});document.querySelectorAll(".card").forEach(c=>io.observe(c))})();
 renderCart();
 </script>
 </body>
